@@ -100,5 +100,7 @@
     "subscriptions_url" : "https:\/\/api.github.com\/users\/octocat\/subscriptions",
     "type" : "User",
     "url" : "https:\/\/api.github.com\/users\/octocat"
-  }
+  },
+  "author_association": "COLLABORATOR",
+  "state_reason": "completed"
 }

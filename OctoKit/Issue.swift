@@ -35,6 +35,8 @@ open class Issue: Codable {
     open var createdAt: Date?
     open var updatedAt: Date?
     open var closedBy: User?
+    open var authorAssociation: String?
+    open var stateReason: String?
 
     public init(id: Int = -1,
                 url: URL? = nil,
@@ -56,7 +58,9 @@ open class Issue: Codable {
                 closedAt: Date? = nil,
                 createdAt: Date? = nil,
                 updatedAt: Date? = nil,
-                closedBy: User? = nil) {
+                closedBy: User? = nil,
+                authorAssociation: String? = nil,
+                stateReason: String? = nil) {
         self.id = id
         self.url = url
         self.repositoryURL = repositoryURL
@@ -78,6 +82,8 @@ open class Issue: Codable {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.closedBy = closedBy
+        self.authorAssociation = authorAssociation
+        self.stateReason = stateReason
     }
 
     enum CodingKeys: String, CodingKey {
@@ -101,6 +107,8 @@ open class Issue: Codable {
         case createdAt = "created_at"
         case updatedAt = "updated_at"
         case closedBy = "closed_by"
+        case authorAssociation = "author_association"
+        case stateReason = "state_reason"
     }
 }
 
