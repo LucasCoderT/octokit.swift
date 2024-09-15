@@ -570,7 +570,7 @@ enum IssueRouter: JSONPostRouter {
 
     var method: HTTPMethod {
         switch self {
-            case .postIssue, .patchIssue, .commentIssue, .patchIssueComment:
+        case .postIssue, .patchIssue, .commentIssue, .patchIssueComment:
             return .POST
         default:
             return .GET
@@ -579,7 +579,7 @@ enum IssueRouter: JSONPostRouter {
 
     var encoding: HTTPEncoding {
         switch self {
-            case .postIssue, .patchIssue, .commentIssue, .patchIssueComment, .readIssueTimeline:
+        case .postIssue, .patchIssue, .commentIssue, .patchIssueComment, .readIssueTimeline:
             return .json
         default:
             return .url
@@ -590,7 +590,7 @@ enum IssueRouter: JSONPostRouter {
         switch self {
         case let .readAuthenticatedIssues(config, _, _, _): return config
         case let .readIssue(config, _, _, _): return config
-            case let .readIssueTimeline(config, _, _,_,_,_): return config
+        case let .readIssueTimeline(config, _, _,_,_,_): return config
         case let .readIssues(config, _, _, _, _, _): return config
         case let .postIssue(config, _, _, _, _, _, _): return config
         case let .patchIssue(config, _, _, _, _, _, _, _): return config
