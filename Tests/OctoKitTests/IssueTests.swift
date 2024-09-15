@@ -42,6 +42,32 @@ class IssueTests: XCTestCase {
     }
     #endif
 
+    func testGetIssueTimeline() {
+        let config = TokenConfiguration("user:12345")
+        let session = OctoKitURLTestSession(expectedURL: "https://api.github.com/repos/octocat/Hello-World/issues/1347/timeline", expectedHTTPMethod: "GET", jsonFile: "issue_timeline", statusCode: 200)
+        let task = Octokit(config, session: session).issueTimeline(owner: "octocat", repository: "Hello-World", number: "1347") { response in
+            switch response {
+            case let .success(timelineEvents):
+                XCTAssertEqual(timelineEvents.count, 4)
+            case .failure:
+                XCTFail("should not get an error")
+            }
+        }
+        XCTAssertNotNil(task)
+        XCTAssertTrue(session.wasCalled)
+    }
+
+    #if compiler(>=5.5.2) && canImport(_Concurrency)
+    @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
+    func testGetIssueTimelineAsync() async throws {
+        let config = TokenConfiguration("user:12345")
+        let session = OctoKitURLTestSession(expectedURL: "https://api.github.com/repos/octocat/Hello-World/issues/1347/timeline", expectedHTTPMethod: "GET", jsonFile: "issue_timeline", statusCode: 200)
+        let timelineEvents = try await Octokit(config, session: session).issueTimeline(owner: "octocat", repository: "Hello-World", number: "1347")
+        XCTAssertEqual(timelineEvents.count, 4)
+        XCTAssertTrue(session.wasCalled)
+    }
+    #endif
+
     func testGetIssue() {
         let session = OctoKitURLTestSession(expectedURL: "https://api.github.com/repos/octocat/Hello-World/issues/1347", expectedHTTPMethod: "GET", jsonFile: "issue", statusCode: 200)
         let task = Octokit(session: session).issue(owner: "octocat", repository: "Hello-World", number: 1347) { response in

@@ -255,6 +255,55 @@ public extension Octokit {
     #endif
 
     /**
+     Fetches an issues timeline
+     - parameter owner: The user or organization that owns the repository.
+     - parameter repository: The name of the repository.
+     - parameter number: The number of the issue.
+     - parameter page: Current page for issue pagination. `1` by default.
+     - parameter perPage: Number of issues per page. `100` by default.
+     - parameter completion: Callback for the outcome of the fetch.
+     */
+    @discardableResult
+    func issueTimeline(owner: String,
+                repository: String,
+                number: String,
+                page: String = "1",
+                perPage: String = "100",
+                completion: @escaping (_ response: Result<[TimelineEvent], Error>) -> Void) -> URLSessionDataTaskProtocol? {
+        let router = IssueRouter.readIssueTimeline(configuration, owner, repository, number, page, perPage)
+        return router.load(session, dateDecodingStrategy: .formatted(Time.rfc3339DateFormatter), expectedResultType: [TimelineEvent].self) { issues, error in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                if let issues = issues {
+                    completion(.success(issues))
+                }
+            }
+        }
+    }
+
+    #if compiler(>=5.5.2) && canImport(_Concurrency)
+    /**
+     Fetches an issues timeline
+     - parameter owner: The user or organization that owns the repository.
+     - parameter repository: The name of the repository.
+     - parameter number: The number of the issue.
+     - parameter page: Current page for issue pagination. `1` by default.
+     - parameter perPage: Number of issues per page. `100` by default.
+     - parameter completion: Callback for the outcome of the fetch.
+     */
+    @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
+    func issueTimeline(owner: String,
+                repository: String,
+                       number: String,
+                page: String = "1",
+                perPage: String = "100") async throws -> [TimelineEvent] {
+        let router = IssueRouter.readIssueTimeline(configuration, owner, repository, number, page, perPage)
+        return try await router.load(session, dateDecodingStrategy: .formatted(Time.rfc3339DateFormatter), expectedResultType: [TimelineEvent].self)
+    }
+    #endif
+
+    /**
      Creates an issue in a repository.
      - parameter owner: The user or organization that owns the repository.
      - parameter repository: The name of the repository.
@@ -511,6 +560,7 @@ public extension Octokit {
 enum IssueRouter: JSONPostRouter {
     case readAuthenticatedIssues(Configuration, String, String, Openness)
     case readIssue(Configuration, String, String, Int)
+    case readIssueTimeline(Configuration, String, String, String, String, String)
     case readIssues(Configuration, String, String, String, String, Openness)
     case postIssue(Configuration, String, String, String, String?, String?, [String])
     case patchIssue(Configuration, String, String, Int, String?, String?, String?, Openness?)
@@ -520,7 +570,7 @@ enum IssueRouter: JSONPostRouter {
 
     var method: HTTPMethod {
         switch self {
-        case .postIssue, .patchIssue, .commentIssue, .patchIssueComment:
+            case .postIssue, .patchIssue, .commentIssue, .patchIssueComment:
             return .POST
         default:
             return .GET
@@ -529,7 +579,7 @@ enum IssueRouter: JSONPostRouter {
 
     var encoding: HTTPEncoding {
         switch self {
-        case .postIssue, .patchIssue, .commentIssue, .patchIssueComment:
+            case .postIssue, .patchIssue, .commentIssue, .patchIssueComment, .readIssueTimeline:
             return .json
         default:
             return .url
@@ -540,6 +590,7 @@ enum IssueRouter: JSONPostRouter {
         switch self {
         case let .readAuthenticatedIssues(config, _, _, _): return config
         case let .readIssue(config, _, _, _): return config
+            case let .readIssueTimeline(config, _, _,_,_,_): return config
         case let .readIssues(config, _, _, _, _, _): return config
         case let .postIssue(config, _, _, _, _, _, _): return config
         case let .patchIssue(config, _, _, _, _, _, _, _): return config
@@ -555,6 +606,8 @@ enum IssueRouter: JSONPostRouter {
             return ["per_page": perPage, "page": page, "state": state.rawValue]
         case .readIssue:
             return [:]
+        case let .readIssueTimeline(_, _, _, _, page, perPage):
+            return ["per_page": perPage, "page": page]
         case let .readIssues(_, _, _, page, perPage, state):
             return ["per_page": perPage, "page": page, "state": state.rawValue]
         case let .postIssue(_, _, _, title, body, assignee, labels):
@@ -599,6 +652,8 @@ enum IssueRouter: JSONPostRouter {
             return "issues"
         case let .readIssue(_, owner, repository, number):
             return "repos/\(owner)/\(repository)/issues/\(number)"
+        case let .readIssueTimeline(_, owner, repository, number, _, _):
+            return "repos/\(owner)/\(repository)/issues/\(number)/timeline"
         case let .readIssues(_, owner, repository, _, _, _):
             return "repos/\(owner)/\(repository)/issues"
         case let .postIssue(_, owner, repository, _, _, _, _):
