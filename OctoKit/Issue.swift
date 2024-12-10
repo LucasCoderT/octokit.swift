@@ -268,7 +268,7 @@ public extension Octokit {
     @discardableResult
     func issueTimeline(owner: String,
                 repository: String,
-                number: String,
+                number: Int,
                 page: String = "1",
                 perPage: String = "100",
                 completion: @escaping (_ response: Result<[TimelineEvent], Error>) -> Void) -> URLSessionDataTaskProtocol? {
@@ -296,10 +296,10 @@ public extension Octokit {
      */
     @available(macOS 12.0, iOS 15.0, tvOS 15.0, watchOS 8.0, *)
     func issueTimeline(owner: String,
-                repository: String,
-                       number: String,
-                page: String = "1",
-                perPage: String = "100") async throws -> [TimelineEvent] {
+                       repository: String,
+                       number: Int,
+                       page: String = "1",
+                       perPage: String = "100") async throws -> [TimelineEvent] {
         let router = IssueRouter.readIssueTimeline(configuration, owner, repository, number, page, perPage)
         return try await router.load(session, dateDecodingStrategy: .formatted(Time.rfc3339DateFormatter), expectedResultType: [TimelineEvent].self)
     }
@@ -562,7 +562,7 @@ public extension Octokit {
 enum IssueRouter: JSONPostRouter {
     case readAuthenticatedIssues(Configuration, String, String, Openness)
     case readIssue(Configuration, String, String, Int)
-    case readIssueTimeline(Configuration, String, String, String, String, String)
+    case readIssueTimeline(Configuration, String, String, Int, String, String)
     case readIssues(Configuration, String, String, String, String, Openness)
     case postIssue(Configuration, String, String, String, String?, String?, [String])
     case patchIssue(Configuration, String, String, Int, String?, String?, String?, Openness?)
