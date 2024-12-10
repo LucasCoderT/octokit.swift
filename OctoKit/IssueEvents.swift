@@ -203,7 +203,7 @@ public enum TimelineEvent: Codable {
 
 
         default:
-            throw DecodingError.dataCorruptedError(forKey: .type, in: container, debugDescription: "Unknown animal type")
+            throw DecodingError.dataCorruptedError(forKey: .type, in: container, debugDescription: "Unknown Event type")
         }
     }
 
@@ -475,15 +475,15 @@ open class ClosedEvent: BaseIssuePayloadImpl {}
 
 open class CommentedEvent: Codable {
     open private(set) var id: Int
-    open var url: URL?
-    open var htmlUrl: URL?
-    open var issueUrl: URL?
+    open var url: URL
+    open var htmlUrl: URL
+    open var issueUrl: URL
     open var actor: User?
-    open var user: User?
+    open var user: User
     open var event: String
-    open var createdAt: Date?
-    open var updatedAt: Date?
-    open var authorAssociation: String?
+    open var createdAt: Date
+    open var updatedAt: Date
+    open var authorAssociation: String
     open var body: String
 
     enum CodingKeys: String, CodingKey {
