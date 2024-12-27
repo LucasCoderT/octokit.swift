@@ -3,7 +3,7 @@ import Foundation
 // Order of events are in order of the API documentation
 // https://docs.github.com/en/rest/using-the-rest-api/issue-event-types
 
-public enum TimelineEvent: Codable {
+public enum TimelineEvent: Decodable {
     case addedToProject(AddedToProjectEvent)
     case assigned(AssignedEvent)
     case automaticBaseChangeFailed(AutomaticBaseChangeFailedEvent)
@@ -207,159 +207,13 @@ public enum TimelineEvent: Codable {
         }
     }
 
-    // Encode function to conform to Codable
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        switch self {
-            case .addedToProject(let event):
-                try container.encode("added_to_project", forKey: .type)
-                try event.encode(to: encoder)
-            case .assigned(let event):
-                try container.encode("assigned", forKey: .type)
-                try event.encode(to: encoder)
-            case .automaticBaseChangeFailed(let event):
-                try container.encode("automatic_base_change_failed", forKey: .type)
-                try event.encode(to: encoder)
-            case .automaticBaseChangeSucceeded(let event):
-                try container.encode("automatic_base_change_succeeded", forKey: .type)
-                try event.encode(to: encoder)
-            case .baseRefChanged(let event):
-                try container.encode("base_ref_changed", forKey: .type)
-                try event.encode(to: encoder)
-            case .closed(let event):
-                try container.encode("closed", forKey: .type)
-                try event.encode(to: encoder)
-            case .commented(let event):
-                try container.encode("commented", forKey: .type)
-                try event.encode(to: encoder)
-            case .committed(let event):
-                try container.encode("committed", forKey: .type)
-                try event.encode(to: encoder)
-            case .connected(let event):
-                try container.encode("connected", forKey: .type)
-                try event.encode(to: encoder)
-            case .convertToDraft(let event):
-                try container.encode("convert_to_draft", forKey: .type)
-                try event.encode(to: encoder)
-            case .convertedNoteToIssue(let event):
-                try container.encode("converted_note_to_issue", forKey: .type)
-                try event.encode(to: encoder)
-            case .convertedToDiscussion(let event):
-                try container.encode("converted_to_discussion", forKey: .type)
-                try event.encode(to: encoder)
-            case .crossReferenced(let event):
-                try container.encode("cross-referenced", forKey: .type)
-                try event.encode(to: encoder)
-            case .demilestoned(let event):
-                try container.encode("demilestoned", forKey: .type)
-                try event.encode(to: encoder)
-            case .deployed(let event):
-                try container.encode("deployed", forKey: .type)
-                try event.encode(to: encoder)
-            case .deploymentEnvironmentChanged(let event):
-                try container.encode("deployment_environment_changed", forKey: .type)
-                try event.encode(to: encoder)
-            case .disconnected(let event):
-                try container.encode("disconnected", forKey: .type)
-                try event.encode(to: encoder)
-            case .headRefDeleted(let event):
-                try container.encode("head_ref_deleted", forKey: .type)
-                try event.encode(to: encoder)
-            case .headRefRestored(let event):
-                try container.encode("head_ref_restored", forKey: .type)
-                try event.encode(to: encoder)
-            case .headRefForcePushed(let event):
-                try container.encode("head_ref_force_pushed", forKey: .type)
-                try event.encode(to: encoder)
-            case .labeled(let event):
-                try container.encode("labeled", forKey: .type)
-                try event.encode(to: encoder)
-            case .locked(let event):
-                try container.encode("locked", forKey: .type)
-                try event.encode(to: encoder)
-            case .mentioned(let event):
-                try container.encode("mentioned", forKey: .type)
-                try event.encode(to: encoder)
-            case .markedAsDuplicate(let event):
-                try container.encode("marked_as_duplicate", forKey: .type)
-                try event.encode(to: encoder)
-            case .merged(let event):
-                try container.encode("merged", forKey: .type)
-                try event.encode(to: encoder)
-            case .milestoned(let event):
-                try container.encode("milestoned", forKey: .type)
-                try event.encode(to: encoder)
-            case .movedColumnsInProject(let event):
-                try container.encode("moved_columns_in_project", forKey: .type)
-                try event.encode(to: encoder)
-            case .pinned(let event):
-                try container.encode("pinned", forKey: .type)
-                try event.encode(to: encoder)
-            case .readyForReview(let event):
-                try container.encode("ready_for_review", forKey: .type)
-                try event.encode(to: encoder)
-            case .referenced(let event):
-                try container.encode("referenced", forKey: .type)
-                try event.encode(to: encoder)
-            case .removedFromProject(let event):
-                try container.encode("removed_from_project", forKey: .type)
-                try event.encode(to: encoder)
-            case .renamed(let event):
-                try container.encode("renamed", forKey: .type)
-                try event.encode(to: encoder)
-            case .reopened(let event):
-                try container.encode("reopened", forKey: .type)
-                try event.encode(to: encoder)
-            case .reviewDismissed(let event):
-                try container.encode("review_dismissed", forKey: .type)
-                try event.encode(to: encoder)
-            case .reviewRequested(let event):
-                try container.encode("review_requested", forKey: .type)
-                try event.encode(to: encoder)
-            case .reviewRequestRemoved(let event):
-                try container.encode("review_request_removed", forKey: .type)
-                try event.encode(to: encoder)
-            case .reviewed(let event):
-                try container.encode("reviewed", forKey: .type)
-                try event.encode(to: encoder)
-            case .subscribed(let event):
-                try container.encode("subscribed", forKey: .type)
-                try event.encode(to: encoder)
-            case .transferred(let event):
-                try container.encode("transferred", forKey: .type)
-                try event.encode(to: encoder)
-            case .unassigned(let event):
-                try container.encode("unassigned", forKey: .type)
-                try event.encode(to: encoder)
-            case .unlabeled(let event):
-                try container.encode("unlabeled", forKey: .type)
-                try event.encode(to: encoder)
-            case .unlocked(let event):
-                try container.encode("unlocked", forKey: .type)
-                try event.encode(to: encoder)
-            case .unmarkedAsDuplicate(let event):
-                try container.encode("unmarked_as_duplicate", forKey: .type)
-                try event.encode(to: encoder)
-            case .unpinned(let event):
-                try container.encode("unpinned", forKey: .type)
-                try event.encode(to: encoder)
-            case .unSubscribed(let event):
-                try container.encode("unsubscribed", forKey: .type)
-                try event.encode(to: encoder)
-            case .userBlocked(let event):
-                try container.encode("user_blocked", forKey: .type)
-                try event.encode(to: encoder)
-                
-        }
-    }
-
 }
 
 
 // Protocol for all events that can be returned by the timeline
 // https://docs.github.com/en/rest/using-the-rest-api/issue-event-types#issue-event-object-common-properties
 // Almost all events share these properties
-protocol BaseIssuePayload: Codable {
+public protocol BaseIssueEvent: Codable {
     var id: Int { get }
     var url: URL? { get }
     var actor: User? { get }
@@ -373,7 +227,7 @@ protocol BaseIssuePayload: Codable {
 // Base Implementation for events that do not have additional properties
 // Override this with an empty subclass to conform to the protocol
 // Used for events that do not have additional properties
-open class BaseIssuePayloadImpl: BaseIssuePayload {
+open class BaseIssueEventImpl: BaseIssueEvent {
 
     open private(set) var id: Int
     open var url: URL?
@@ -406,7 +260,7 @@ open class BaseIssuePayloadImpl: BaseIssuePayload {
 }
 
 
-open class AddedToProjectEvent: BaseIssuePayload {
+open class AddedToProjectEvent: BaseIssueEvent {
 
     open private(set) var id: Int
     open var url: URL?
@@ -437,7 +291,7 @@ open class AddedToProjectEvent: BaseIssuePayload {
 
 }
 
-open class AssignedEvent: BaseIssuePayload {
+open class AssignedEvent: BaseIssueEvent {
 
     open private(set) var id: Int
     open var url: URL?
@@ -467,10 +321,10 @@ open class AssignedEvent: BaseIssuePayload {
 }
 
 
-open class AutomaticBaseChangeFailedEvent: BaseIssuePayloadImpl {}
-open class AutomaticBaseChangeSucceededEvent: BaseIssuePayloadImpl {}
-open class BaseRefChangedEvent: BaseIssuePayloadImpl {}
-open class ClosedEvent: BaseIssuePayloadImpl {}
+open class AutomaticBaseChangeFailedEvent: BaseIssueEventImpl {}
+open class AutomaticBaseChangeSucceededEvent: BaseIssueEventImpl {}
+open class BaseRefChangedEvent: BaseIssueEventImpl {}
+open class ClosedEvent: BaseIssueEventImpl {}
 
 
 open class CommentedEvent: Codable {
@@ -524,10 +378,10 @@ open class CommittedEvent: Codable {
 }
 
 
-open class ConnectedEvent: BaseIssuePayloadImpl {}
-open class ConvertToDraftEvent: BaseIssuePayloadImpl {}
+open class ConnectedEvent: BaseIssueEventImpl {}
+open class ConvertToDraftEvent: BaseIssueEventImpl {}
 open class ConvertedNoteToIssueEvent: AddedToProjectEvent {}
-open class ConvertedToDiscussionEvent: BaseIssuePayloadImpl {}
+open class ConvertedToDiscussionEvent: BaseIssueEventImpl {}
 
 public struct CrossReferenceSource: Codable {
     public var type: String
@@ -543,7 +397,7 @@ open class CrossReferencedEvent: Codable {
 }
 
 
-open class DemilestonedEvent: BaseIssuePayload {
+open class DemilestonedEvent: BaseIssueEvent {
     open private(set) var id: Int
     open var url: URL?
     open var actor: User?
@@ -570,14 +424,14 @@ open class DemilestonedEvent: BaseIssuePayload {
 }
 
 
-open class DeployedEvent: BaseIssuePayloadImpl {}
-open class DeploymentEnvironmentChangedEvent: BaseIssuePayloadImpl {}
-open class DisconnectedEvent: BaseIssuePayloadImpl {}
-open class HeadRefDeletedEvent: BaseIssuePayloadImpl {}
-open class HeadRefRestoredEvent: BaseIssuePayloadImpl {}
-open class HeadRefForcePushedEvent: BaseIssuePayloadImpl {}
+open class DeployedEvent: BaseIssueEventImpl {}
+open class DeploymentEnvironmentChangedEvent: BaseIssueEventImpl {}
+open class DisconnectedEvent: BaseIssueEventImpl {}
+open class HeadRefDeletedEvent: BaseIssueEventImpl {}
+open class HeadRefRestoredEvent: BaseIssueEventImpl {}
+open class HeadRefForcePushedEvent: BaseIssueEventImpl {}
 
-open class LabeledEvent: BaseIssuePayload {
+open class LabeledEvent: BaseIssueEvent {
     open private(set) var id: Int
     open var url: URL?
     open var actor: User?
@@ -602,7 +456,7 @@ open class LabeledEvent: BaseIssuePayload {
 
 }
 
-open class LockedEvent: BaseIssuePayload {
+open class LockedEvent: BaseIssueEvent {
     open private(set) var id: Int
     open var url: URL?
     open var actor: User?
@@ -627,13 +481,13 @@ open class LockedEvent: BaseIssuePayload {
 
 }
 
-open class MentionedEvent: BaseIssuePayloadImpl {}
-open class MarkedAsDuplicateEvent: BaseIssuePayloadImpl {}
-open class MergedEvent: BaseIssuePayloadImpl {}
+open class MentionedEvent: BaseIssueEventImpl {}
+open class MarkedAsDuplicateEvent: BaseIssueEventImpl {}
+open class MergedEvent: BaseIssueEventImpl {}
 open class MilestonedEvent: DemilestonedEvent {}
 
 
-open class MovedColumnsInProjectEvent: BaseIssuePayload {
+open class MovedColumnsInProjectEvent: BaseIssueEvent {
     open private(set) var id: Int
     open var url: URL?
     open var actor: User?
@@ -665,9 +519,9 @@ open class MovedColumnsInProjectEvent: BaseIssuePayload {
 }
 
 
-open class PinnedEvent: BaseIssuePayloadImpl {}
-open class ReadyForReviewEvent: BaseIssuePayloadImpl {}
-open class ReferencedEvent: BaseIssuePayloadImpl {}
+open class PinnedEvent: BaseIssueEventImpl {}
+open class ReadyForReviewEvent: BaseIssueEventImpl {}
+open class ReferencedEvent: BaseIssueEventImpl {}
 open class RemovedFromProjectEvent: AddedToProjectEvent {}
 
 
@@ -676,7 +530,7 @@ public struct RenamedTitle: Codable {
     public var to: String
 }
 
-open class RenamedEvent: BaseIssuePayload {
+open class RenamedEvent: BaseIssueEvent {
     open private(set) var id: Int
     open var url: URL?
     open var actor: User?
@@ -702,9 +556,9 @@ open class RenamedEvent: BaseIssuePayload {
 }
 
 
-open class ReopenedEvent: BaseIssuePayloadImpl {}
+open class ReopenedEvent: BaseIssueEventImpl {}
 
-open class ReviewDismissedEvent: BaseIssuePayload {
+open class ReviewDismissedEvent: BaseIssueEvent {
     open private(set) var id: Int
     open var url: URL?
     open var actor: User?
@@ -729,7 +583,7 @@ open class ReviewDismissedEvent: BaseIssuePayload {
 
 }
 
-open class ReviewRequestedEvent: BaseIssuePayload {
+open class ReviewRequestedEvent: BaseIssueEvent {
     open private(set) var id: Int
     open var url: URL?
     open var actor: User?
@@ -774,12 +628,12 @@ open class ReviewedEvent: Codable {
 }
 
 
-open class SubscribedEvent: BaseIssuePayloadImpl {}
-open class TransferredEvent: BaseIssuePayloadImpl {}
+open class SubscribedEvent: BaseIssueEventImpl {}
+open class TransferredEvent: BaseIssueEventImpl {}
 open class UnassignedEvent: AssignedEvent {}
 open class UnlabeledEvent: LabeledEvent {}
 open class UnlockedEvent: LockedEvent {}
-open class UnmarkedAsDuplicateEvent: BaseIssuePayloadImpl {}
+open class UnmarkedAsDuplicateEvent: BaseIssueEventImpl {}
 open class UnpinnedEvent: PinnedEvent {}
 open class UnSubscribedEvent: SubscribedEvent {}
-open class UserBlockedEvent: BaseIssuePayloadImpl {}
+open class UserBlockedEvent: BaseIssueEventImpl {}
