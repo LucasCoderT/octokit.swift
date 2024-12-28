@@ -45,7 +45,7 @@ class IssueTests: XCTestCase {
     func testGetIssueTimeline() {
         let config = TokenConfiguration("user:12345")
         let session = OctoKitURLTestSession(expectedURL: "https://api.github.com/repos/octocat/Hello-World/issues/1347/timeline", expectedHTTPMethod: "GET", jsonFile: "issue_timeline", statusCode: 200)
-        let task = Octokit(config, session: session).issueTimeline(owner: "octocat", repository: "Hello-World", number: "1347") { response in
+        let task = Octokit(config, session: session).issueTimeline(owner: "octocat", repository: "Hello-World", number: 1347) { response in
             switch response {
             case let .success(timelineEvents):
                 XCTAssertEqual(timelineEvents.count, 4)
@@ -62,7 +62,7 @@ class IssueTests: XCTestCase {
     func testGetIssueTimelineAsync() async throws {
         let config = TokenConfiguration("user:12345")
         let session = OctoKitURLTestSession(expectedURL: "https://api.github.com/repos/octocat/Hello-World/issues/1347/timeline", expectedHTTPMethod: "GET", jsonFile: "issue_timeline", statusCode: 200)
-        let timelineEvents = try await Octokit(config, session: session).issueTimeline(owner: "octocat", repository: "Hello-World", number: "1347")
+        let timelineEvents = try await Octokit(config, session: session).issueTimeline(owner: "octocat", repository: "Hello-World", number: 1347)
         XCTAssertEqual(timelineEvents.count, 4)
         XCTAssertTrue(session.wasCalled)
     }
